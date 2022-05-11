@@ -7,7 +7,7 @@ import styles from "./SearchBar.styles";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons/faMagnifyingGlass";
 
-const SearchBar = () => {
+export default function SearchBar() {
   const [searchTerm, setSearchTerm] = useState("");
 
   return (
@@ -29,5 +29,3 @@ const SearchBar = () => {
     </View>
   );
 };
-
-export default SearchBar;

@@ -5,12 +5,10 @@ import SearchBar from "../SearchBar/SearchBar";
 
 import styles from "./Header.styles";
 
-const Header = () => {
+export default function Header() {
   return (
     <View style={styles.container}>
       <SearchBar />
     </View>
   );
-};
-
-export default Header;
+}

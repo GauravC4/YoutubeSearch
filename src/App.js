@@ -1,16 +1,15 @@
 import React from "react";
-import { SafeAreaView, ScrollView, Text, View } from "react-native";
-
-import Header from "./components/Header/Header";
+import { SafeAreaView, View } from "react-native";
 
 import styles from "./App.styles";
-import ResultContainer from "./components/ResultContainer/ResultContainer";
+
+import Search from "./components/Search/Search";
 
 const App = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <ResultContainer />
+        <Search />
       </View>
     </SafeAreaView>
   );

@@ -2,9 +2,9 @@ import React from "react";
 import { FlatList } from "react-native";
 
 import VideoCard from "./VideoCard/VideoCard";
-import Header from "../Header/Header";
 
-import styles from "./ResultContainer.styles";
+import styles from "./Search.styles";
+import SearchBar from "./SearchBar/SearchBar";
 
 const DATA = Array(10)
   .fill({
@@ -31,7 +31,7 @@ const DATA = Array(10)
   })
   .map((item, idx) => ({ ...item, id: idx }));
 
-export default function ResultContainer() {
+export default function Search() {
   return (
     <FlatList
       style={styles.container}
@@ -49,7 +49,7 @@ export default function ResultContainer() {
         );
       }}
       keyExtractor={(item) => item.id}
-      ListHeaderComponent={() => <Header />}
+      ListHeaderComponent={() => <SearchBar />}
       stickyHeaderIndices={[0]}
     />
   );

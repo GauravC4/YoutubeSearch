@@ -4,6 +4,8 @@ import { View, Image, Text } from "react-native";
 
 import styles from "./VideoCard.styles";
 
+import { condenseViews } from "../../../services/Utils";
+
 export default function VideoCard({
   isPotrait,
   thumbnailURI,
@@ -37,7 +39,9 @@ export default function VideoCard({
           <Text style={styles.title}>{title}</Text>
           <View style={styles.channelStatsContainer}>
             <Text style={styles.channelStats}>{channelName}</Text>
-            <Text style={styles.channelStats}>{views} views</Text>
+            <Text style={styles.channelStats}>
+              {condenseViews(views)} views
+            </Text>
             <Text style={styles.channelStats}>{publishDate}</Text>
           </View>
         </View>

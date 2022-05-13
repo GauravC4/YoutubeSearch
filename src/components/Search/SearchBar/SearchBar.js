@@ -7,7 +7,7 @@ import styles from "./SearchBar.styles";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons/faMagnifyingGlass";
 
-export default function SearchBar() {
+export default function SearchBar({ isPotrait }) {
   const [searchTerm, setSearchTerm] = useState("");
 
   return (

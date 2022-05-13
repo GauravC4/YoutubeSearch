@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList } from "react-native";
+import { FlatList, View } from "react-native";
 
 import VideoCard from "./VideoCard/VideoCard";
 
@@ -31,7 +31,7 @@ const DATA = Array(10)
   })
   .map((item, idx) => ({ ...item, id: idx }));
 
-export default function Search() {
+export default function Search({ isPotrait }) {
   return (
     <FlatList
       style={styles.container}
@@ -39,17 +39,20 @@ export default function Search() {
       renderItem={({ item }) => {
         return (
           <VideoCard
+            isPotrait={isPotrait}
             thumbnailURI={item.thumbnail.static}
             length={item.length}
             channelThumbnailURI={item.channel.thumbnail}
             title={item.title}
             channelName={item.channel.name}
             views={item.views}
+            publishDate={item.published_date}
           />
         );
       }}
       keyExtractor={(item) => item.id}
-      ListHeaderComponent={() => <SearchBar />}
+      ItemSeparatorComponent={() => <View style={{ height: 15 }} />}
+      ListHeaderComponent={() => <SearchBar isPotrait={isPotrait} />}
       stickyHeaderIndices={[0]}
     />
   );

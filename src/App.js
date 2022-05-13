@@ -10,7 +10,6 @@ const App = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Header />
         <ResultContainer />
       </View>
     </SafeAreaView>

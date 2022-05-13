@@ -2,6 +2,7 @@ import React from "react";
 import { FlatList } from "react-native";
 
 import VideoCard from "./VideoCard/VideoCard";
+import Header from "../Header/Header";
 
 import styles from "./ResultContainer.styles";
 
@@ -48,6 +49,8 @@ export default function ResultContainer() {
         );
       }}
       keyExtractor={(item) => item.id}
+      ListHeaderComponent={() => <Header />}
+      stickyHeaderIndices={[0]}
     />
   );
 }

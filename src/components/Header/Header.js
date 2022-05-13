@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 
-import SearchBar from "../SearchBar/SearchBar";
+import SearchBar from "./SearchBar/SearchBar";
 
 import styles from "./Header.styles";
 

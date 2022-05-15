@@ -30,33 +30,40 @@ export default function Search({ isPotrait }) {
   const [searchTerm, setSearchTerm] = useState();
   const [data, setData] = useState();
   const [loading, setLoading] = useState("false");
+  const [nextPageToken, setNextPageToken] = useState();
+
+  async function apiFetch(more = false) {
+    if (searchTerm && searchTerm.length > 3) {
+      setLoading(true);
+
+      let searchEndPoint = `search?part=snippet&q=${searchTerm}&type=video`;
+      if (nextPageToken) searchEndPoint += `&pageToken=${nextPageToken}`;
+
+      api
+        .get(searchEndPoint)
+        .then((res) => {
+          setNextPageToken(res.data.nextPageToken);
+          const videoIds = res.data.items.map((item) => item.id.videoId);
+          api
+            .get(
+              `videos?part=snippet&part=statistics&part=contentDetails&id=${videoIds.join(
+                ","
+              )}`
+            )
+            .then((res) => {
+              let newData = transformVideoData(res.data);
+              if (more) setData([...data, ...newData]);
+              else setData(newData);
+            })
+            .catch((err) => console.error(err));
+        })
+        .catch((err) => console.error(err));
+
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    async function apiFetch() {
-      if (searchTerm && searchTerm.length > 3) {
-        setLoading(true);
-        api
-          .get(`search?part=snippet&q=${searchTerm}&type=video`)
-          .then((res) => {
-            const videoIds = res.data.items.map((item) => item.id.videoId);
-            api
-              .get(
-                `videos?part=snippet&part=statistics&part=contentDetails&id=${videoIds.join(
-                  ","
-                )}`
-              )
-              .then((res) => {
-                let newData = transformVideoData(res.data);
-                setData(newData);
-              })
-              .catch((err) => console.error(err));
-          })
-          .catch((err) => console.error(err));
-
-        setLoading(false);
-      }
-    }
-
     apiFetch();
   }, [searchTerm]);
 
@@ -91,6 +98,8 @@ export default function Search({ isPotrait }) {
           loading={loading}
         />
       )}
+      onEndReachedThreshold={0.2}
+      onEndReached={() => apiFetch(true)}
     />
   );
 }

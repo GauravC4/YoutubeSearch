@@ -34,7 +34,9 @@ export default function VideoCard({
           />
         </View>
         <View style={getOrientStyle("details")}>
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title} numberOfLines={2}>
+            {title}
+          </Text>
           <View style={styles.channelStatsContainer}>
             <Text style={styles.channelStats}>{channelName}</Text>
             <Text style={styles.channelStats}>{views} views</Text>

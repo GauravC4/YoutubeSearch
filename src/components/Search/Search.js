@@ -7,6 +7,7 @@ import {
   condenseViews,
   timeStringTransfrom,
   dateTimeAgo,
+  cleanMerge,
 } from "../../services/Utils";
 
 import SearchBar from "./SearchBar/SearchBar";
@@ -16,6 +17,7 @@ import VideoCard from "./VideoCard/VideoCard";
 function transformVideoData(input) {
   return input.items.map((item) => ({
     id: item.id,
+    etag: item.etag,
     channelTitle: item.snippet.channelTitle,
     title: item.snippet.title,
     tumbnailURL: item.snippet.thumbnails.medium.url,
@@ -52,7 +54,7 @@ export default function Search({ isPotrait }) {
             )
             .then((res) => {
               let newData = transformVideoData(res.data);
-              if (more) setData([...data, ...newData]);
+              if (more) setData(cleanMerge(data, newData, "id"));
               else setData(newData);
             })
             .catch((err) => console.error(err));
@@ -66,6 +68,10 @@ export default function Search({ isPotrait }) {
   useEffect(() => {
     apiFetch();
   }, [searchTerm]);
+
+  // useEffect(() => {
+  //   console.log("data ", data);
+  // }, [data]);
 
   return (
     <FlatList

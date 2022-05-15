@@ -45,4 +45,13 @@ const dateTimeAgo = (dateString) => {
   return "Now";
 };
 
-export { condenseViews, timeStringTransfrom, dateTimeAgo };
+const cleanMerge = (list1, list2, key) => {
+  const list1Keys = list1.map((item) => item[key]);
+  list2.forEach((item) => {
+    if (!(item[key] in list1Keys)) list1.push(item);
+    else console.log("duplicate found");
+  });
+  return [...list1];
+};
+
+export { condenseViews, timeStringTransfrom, dateTimeAgo, cleanMerge };

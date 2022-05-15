@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { FlatList, View } from "react-native";
 
 import VideoCard from "./VideoCard/VideoCard";
 
 import styles from "./Search.styles";
 import SearchBar from "./SearchBar/SearchBar";
+import EmptySearch from "./EmptySearch/EmptySearch";
 
 const DATA = Array(10)
   .fill({
@@ -32,6 +33,8 @@ const DATA = Array(10)
   .map((item, idx) => ({ ...item, id: idx }));
 
 export default function Search({ isPotrait }) {
+  const [searchTerm, setSearchTerm] = useState();
+
   return (
     <FlatList
       style={styles.container}
@@ -52,8 +55,13 @@ export default function Search({ isPotrait }) {
       }}
       keyExtractor={(item) => item.id}
       ItemSeparatorComponent={() => <View style={{ height: 15 }} />}
-      ListHeaderComponent={() => <SearchBar isPotrait={isPotrait} />}
+      ListHeaderComponent={() => (
+        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      )}
       stickyHeaderIndices={[0]}
+      ListEmptyComponent={() => (
+        <EmptySearch searchTerm={searchTerm} isPotrait={isPotrait} />
+      )}
     />
   );
 }

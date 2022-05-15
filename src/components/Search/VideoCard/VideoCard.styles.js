@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 const container = {
   height: 300,
   backgroundColor: "black",
-  borderRadius: 10,
   overflow: "hidden",
 };
 
@@ -96,7 +95,7 @@ const channelStatsContainer = {
 const channelStats = {
   fontSize: 12,
   color: "#a1a1a1",
-  marginRight: 5,
+  marginRight: 10,
 };
 
 export default StyleSheet.create({

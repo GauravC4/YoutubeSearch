@@ -1,55 +1,80 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FlatList, View } from "react-native";
 
-import VideoCard from "./VideoCard/VideoCard";
-
 import styles from "./Search.styles";
+import api from "../../services/api";
+import {
+  condenseViews,
+  timeStringTransfrom,
+  dateTimeAgo,
+} from "../../services/Utils";
+
 import SearchBar from "./SearchBar/SearchBar";
 import EmptySearch from "./EmptySearch/EmptySearch";
+import VideoCard from "./VideoCard/VideoCard";
 
-const DATA = Array(10)
-  .fill({
-    id: 1,
-    position_on_page: 11,
-    title: "2020 Portrayed by Star Wars",
-    link: "https://www.youtube.com/watch?v=L8Sezzl7_zU",
-    channel: {
-      name: "Supercuts Delight",
-      link: "https://www.youtube.com/channel/UCg_s1VNrLoV4cFsH9TKXnuw",
-      thumbnail:
-        "https://yt3.ggpht.com/a-/AOh14GhpsylVb0S_fngM7KPSLXTsrSPIMdLMn3JEyA=s68-c-k-c0x00ffffff-no-rj-mo",
-    },
-    published_date: "1 month ago",
-    views: 1488270,
-    length: "7:04",
-    description:
-      "A Parody of Star Wars in which I relate events that have happened in 2020 to scenes and clips from Star Wars. Basically a recap ...",
-    thumbnail: {
-      static:
-        "https://i.ytimg.com/vi/L8Sezzl7_zU/hq720.jpg?sqp=-oaymwEZCOgCEMoBSFXyq4qpAwsIARUAAIhCGAFwAQ==&rs=AOn4CLB1L30hsaHnNpdPrDpEQ31VVwnW4w",
-      rich: "https://i.ytimg.com/an_webp/L8Sezzl7_zU/mqdefault_6s.webp?du=3000&sqp=CMzk9PwF&rs=AOn4CLCOipXxYpZjKuyaNVpBvEToV8tFdQ",
-    },
-  })
-  .map((item, idx) => ({ ...item, id: idx }));
+function transformVideoData(input) {
+  return input.items.map((item) => ({
+    id: item.id,
+    channelTitle: item.snippet.channelTitle,
+    title: item.snippet.title,
+    tumbnailURL: item.snippet.thumbnails.medium.url,
+    channelThumbnailURL: item.snippet.thumbnails.default.url,
+    views: condenseViews(item.statistics.viewCount),
+    duration: timeStringTransfrom(item.contentDetails.duration),
+    publishedAt: dateTimeAgo(item.snippet.publishedAt),
+  }));
+}
 
 export default function Search({ isPotrait }) {
   const [searchTerm, setSearchTerm] = useState();
+  const [data, setData] = useState();
+  const [loading, setLoading] = useState("false");
+
+  useEffect(() => {
+    async function apiFetch() {
+      if (searchTerm && searchTerm.length > 3) {
+        setLoading(true);
+        api
+          .get(`search?part=snippet&q=${searchTerm}&type=video`)
+          .then((res) => {
+            const videoIds = res.data.items.map((item) => item.id.videoId);
+            api
+              .get(
+                `videos?part=snippet&part=statistics&part=contentDetails&id=${videoIds.join(
+                  ","
+                )}`
+              )
+              .then((res) => {
+                let newData = transformVideoData(res.data);
+                setData(newData);
+              })
+              .catch((err) => console.error(err));
+          })
+          .catch((err) => console.error(err));
+
+        setLoading(false);
+      }
+    }
+
+    apiFetch();
+  }, [searchTerm]);
 
   return (
     <FlatList
       style={styles.container}
-      data={DATA}
+      data={data}
       renderItem={({ item }) => {
         return (
           <VideoCard
             isPotrait={isPotrait}
-            thumbnailURI={item.thumbnail.static}
-            length={item.length}
-            channelThumbnailURI={item.channel.thumbnail}
+            thumbnailURI={item.tumbnailURL}
+            length={item.duration}
+            channelThumbnailURI={item.channelThumbnailURL}
             title={item.title}
-            channelName={item.channel.name}
+            channelName={item.channelTitle}
             views={item.views}
-            publishDate={item.published_date}
+            publishDate={item.publishedAt}
           />
         );
       }}
@@ -60,7 +85,11 @@ export default function Search({ isPotrait }) {
       )}
       stickyHeaderIndices={[0]}
       ListEmptyComponent={() => (
-        <EmptySearch searchTerm={searchTerm} isPotrait={isPotrait} />
+        <EmptySearch
+          searchTerm={searchTerm}
+          isPotrait={isPotrait}
+          loading={loading}
+        />
       )}
     />
   );

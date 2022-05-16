@@ -5,6 +5,18 @@ const container = {
   justifyContent: "center",
 };
 
+const skeleton_container = {
+  paddingHorizontal: 10,
+};
+
+const skeleton = {
+  marginVertical: 50,
+};
+
+const ls_skeleton = {
+  marginVertical: 2,
+};
+
 const ls_container = {
   ...container,
   height: Dimensions.get("screen").height / 4,
@@ -21,5 +33,8 @@ const text = {
 export default StyleSheet.create({
   container,
   ls_container,
+  skeleton_container,
+  skeleton,
+  ls_skeleton,
   text,
 });

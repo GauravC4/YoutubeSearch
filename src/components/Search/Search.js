@@ -31,12 +31,12 @@ function transformVideoData(input) {
 export default function Search({ isPotrait }) {
   const [searchTerm, setSearchTerm] = useState();
   const [data, setData] = useState();
-  const [loading, setLoading] = useState("false");
+  const [paging, setPaging] = useState("false");
   const [nextPageToken, setNextPageToken] = useState();
 
   async function apiFetch(more = false) {
     if (searchTerm && searchTerm.length > 3) {
-      setLoading(true);
+      setPaging(true);
 
       let searchEndPoint = `search?part=snippet&q=${searchTerm}&type=video`;
       if (nextPageToken) searchEndPoint += `&pageToken=${nextPageToken}`;
@@ -61,17 +61,24 @@ export default function Search({ isPotrait }) {
         })
         .catch((err) => console.error(err));
 
-      setLoading(false);
+      setPaging(false);
     }
   }
 
   useEffect(() => {
+    setData(null);
     apiFetch();
   }, [searchTerm]);
 
   // useEffect(() => {
-  //   setData(transformVideoData(DUMMY_DATA));
-  // }, []);
+  //   async function delayedFetch() {
+  //     await setTimeout(() => setData(transformVideoData(DUMMY_DATA)), 2000);
+  //   }
+  //   if (searchTerm) {
+  //     setData(null);
+  //     delayedFetch();
+  //   }
+  // }, [searchTerm]);
 
   return (
     <FlatList
@@ -98,11 +105,7 @@ export default function Search({ isPotrait }) {
       )}
       stickyHeaderIndices={[0]}
       ListEmptyComponent={() => (
-        <EmptySearch
-          searchTerm={searchTerm}
-          isPotrait={isPotrait}
-          loading={loading}
-        />
+        <EmptySearch searchTerm={searchTerm} isPotrait={isPotrait} />
       )}
       onEndReachedThreshold={0.2}
       onEndReached={() => apiFetch(true)}

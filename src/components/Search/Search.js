@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, View } from "react-native";
+import { FlatList, View, ActivityIndicator } from "react-native";
 
 import styles from "./Search.styles";
 import api from "../../services/api";
@@ -36,12 +36,12 @@ export default function Search({ isPotrait }) {
 
   async function apiFetch(more = false) {
     if (searchTerm && searchTerm.length > 3) {
-      setPaging(true);
+      if (more) setPaging(true);
 
       let searchEndPoint = `search?part=snippet&q=${searchTerm}&type=video`;
       if (nextPageToken) searchEndPoint += `&pageToken=${nextPageToken}`;
 
-      api
+      await api
         .get(searchEndPoint)
         .then((res) => {
           setNextPageToken(res.data.nextPageToken);
@@ -61,7 +61,7 @@ export default function Search({ isPotrait }) {
         })
         .catch((err) => console.error(err));
 
-      setPaging(false);
+      if (more) setPaging(false);
     }
   }
 
@@ -109,6 +109,13 @@ export default function Search({ isPotrait }) {
       )}
       onEndReachedThreshold={0.2}
       onEndReached={() => apiFetch(true)}
+      ListFooterComponent={() =>
+        !paging && (
+          <View style={styles.footer}>
+            <ActivityIndicator size="large" color={"#188fff"} />
+          </View>
+        )
+      }
     />
   );
 }

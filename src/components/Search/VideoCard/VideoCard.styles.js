@@ -14,20 +14,15 @@ const ls_container = {
 };
 
 const thumbnailContainer = {
-  width: "100%",
-  height: "75%",
+  flex: 1,
 };
 
 const ls_thumbnailContainer = {
-  ...thumbnailContainer,
-  width: "30%",
-  height: "100%",
+  width: 225,
 };
 
 const img = {
-  width: "100%",
-  height: "100%",
-  resizeMode: "stretch",
+  flex: 1,
 };
 
 const lengthContainer = {

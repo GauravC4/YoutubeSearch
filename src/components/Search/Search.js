@@ -20,7 +20,7 @@ function transformVideoData(input) {
     etag: item.etag,
     channelTitle: item.snippet.channelTitle,
     title: item.snippet.title,
-    tumbnailURL: item.snippet.thumbnails.medium.url,
+    tumbnailURL: item.snippet.thumbnails.high.url,
     channelThumbnailURL: item.snippet.thumbnails.default.url,
     views: condenseViews(item.statistics.viewCount),
     duration: timeStringTransfrom(item.contentDetails.duration),

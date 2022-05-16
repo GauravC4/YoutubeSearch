@@ -7,8 +7,8 @@ import {
   condenseViews,
   timeStringTransfrom,
   dateTimeAgo,
-  cleanMerge,
 } from "../../services/Utils";
+import DUMMY_DATA from "./DUMMY_DATA";
 
 import SearchBar from "./SearchBar/SearchBar";
 import EmptySearch from "./EmptySearch/EmptySearch";
@@ -54,7 +54,7 @@ export default function Search({ isPotrait }) {
             )
             .then((res) => {
               let newData = transformVideoData(res.data);
-              if (more) setData(cleanMerge(data, newData, "id"));
+              if (more) setData([...data, ...newData]);
               else setData(newData);
             })
             .catch((err) => console.error(err));
@@ -70,8 +70,8 @@ export default function Search({ isPotrait }) {
   }, [searchTerm]);
 
   // useEffect(() => {
-  //   console.log("data ", data);
-  // }, [data]);
+  //   setData(transformVideoData(DUMMY_DATA));
+  // }, []);
 
   return (
     <FlatList
@@ -91,7 +91,7 @@ export default function Search({ isPotrait }) {
           />
         );
       }}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item, idx) => idx}
       ItemSeparatorComponent={() => <View style={{ height: 15 }} />}
       ListHeaderComponent={() => (
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />

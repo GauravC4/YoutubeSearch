@@ -87,6 +87,7 @@ export default function Search({ isPotrait }) {
       renderItem={({ item }) => {
         return (
           <VideoCard
+            videoId={item.id}
             isPotrait={isPotrait}
             thumbnailURI={item.tumbnailURL}
             length={item.duration}
